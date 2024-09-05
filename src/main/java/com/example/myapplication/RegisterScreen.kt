@@ -23,6 +23,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -31,6 +32,9 @@ fun RegisterScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var birthDate by remember { mutableStateOf<LocalDate?>(null) }
+
+    // Mensaje de error
+    var errorMessage by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val locale = Locale("es", "CL")
@@ -156,10 +160,37 @@ fun RegisterScreen(navController: NavController) {
                 )
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mostrar el mensaje de error si existe
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             Button(
-                onClick = {  },
+                onClick = {
+                    // Validar si el email ya está registrado
+                    if (users.any { it.email == email }) {
+                        errorMessage = "El correo ya está registrado"
+                    }
+                    // Validar si las contraseñas coinciden
+                    else if (password != confirmPassword) {
+                        errorMessage = "Las contraseñas no coinciden"
+                    }
+                    else {
+                        // Agregar el nuevo usuario a la lista de usuarios
+                        users += User(email = email, password = password, username = username)
+                        // Limpiar el mensaje de error
+                        errorMessage = ""
+                        // Navegar al login
+                        navController.navigate("login_S")
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -182,3 +213,4 @@ fun RegisterScreen(navController: NavController) {
         }
     }
 }
+

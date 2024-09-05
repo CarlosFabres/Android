@@ -41,13 +41,14 @@ import androidx.navigation.NavController
 
 data class User(val email: String, val password: String, val username: String)
 
-val users = listOf(
+val users = mutableListOf(
     User(email = "cheka4k@gmail.com", password = "1234", username = "Cheka4k"),
     User(email = "user@2.com", password = "1234", username = "User2"),
     User(email = "user@3.com", password = "1234", username = "User3"),
     User(email = "user@4.com", password = "1234", username = "User4"),
     User(email = "user@5.com", password = "1234", username = "User5")
 )
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
